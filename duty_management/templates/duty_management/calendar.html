@@ -1,0 +1,39 @@
+{% extends "duty_management/base.html" %}
+{% block content %}
+<h1>管理システム</h1>
+
+<div class="container1">  
+  <h2>MPMS予約状況</h2>
+</div>
+<div id="calendar"></div>
+<div class="container2">
+  <form action="{% url 'duty_management:reserve' %}" method="get">
+      <input type="submit" value="予約">
+  </form>
+</div>
+<script>
+  let calendarEl = document.getElementById('calendar');
+  let calendar = new FullCalendar.Calendar(calendarEl, {
+                  headerToolbar: {
+                                  left: "prev,next today",
+                                  center: "title",
+                                  right: "dayGridMonth,timeGridWeek,listWeek",
+                              },
+                  events: [     
+                    {% for event in event_list %}
+                        {
+                            "title": "{{event.title}}",
+                            "start": "{{event.start}}",
+                            "end": "{{event.end}}",
+                        },
+                    {% endfor %}
+                      
+                  ],
+                  dateClick: function(info) {
+                      console.log(info.dateStr);
+                  }
+              });
+
+  calendar.render();
+</script>
+{% endblock %}

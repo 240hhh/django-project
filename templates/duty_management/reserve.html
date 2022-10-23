@@ -1,0 +1,38 @@
+{% extends "duty_management/base.html" %}
+{% block content %}
+<h1>管理システム</h1>
+
+<div class="container1">  
+<h2>MPMS予約状況</h2>
+</div>
+<div id="calendar"></div>
+<div class="container2">
+<form action="{% url 'duty_management:reserve_decision' %}" method="post">
+    {% csrf_token %}
+    <p>{{user.username}}</p>
+    <input type="date" name="start_date">
+    <input type="date" name="end_date">
+    <input type="submit">
+</form>
+</div>
+<script>
+let calendarEl = document.getElementById('calendar');
+let calendar = new FullCalendar.Calendar(calendarEl, {
+                events: [
+                    {% for event in event_list %}
+                        {
+                            date: '{{event.date}}',
+                            display: 'background',
+                            color: '#d3d3d3'
+                        },
+                    {% endfor %}
+                    
+                ],
+                dateClick: function(info) {
+                    console.log(info.dateStr);
+                }
+            });
+
+calendar.render();
+</script>
+{% endblock %}
